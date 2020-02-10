@@ -1,0 +1,131 @@
+[{
+  "id": "aee60772.6c05e8",
+  "type": "http in",
+  "z": "3cb293ec.b3f05c",
+  "name": "",
+  "url": "/reco",
+  "method": "get",
+  "swaggerDoc": "",
+  "x": 146,
+  "y": 208,
+  "wires": [
+    ["656bffcd.3fb7d"]
+  ]
+}, {
+  "id": "656bffcd.3fb7d",
+  "type": "switch",
+  "z": "3cb293ec.b3f05c",
+  "name": "Check Image param",
+  "property": "payload.imageurl",
+  "propertyType": "msg",
+  "rules": [{
+    "t": "null"
+  }, {
+    "t": "else"
+  }],
+  "checkall": "false",
+  "outputs": 2,
+  "x": 242,
+  "y": 281,
+  "wires": [
+    ["ca3c7151.739ea"],
+    ["331a89d4.c4dff6", "a11978b4.dd39b8"]
+  ]
+}, {
+  "id": "ca3c7151.739ea",
+  "type": "template",
+  "z": "3cb293ec.b3f05c",
+  "name": "Get Image URL",
+  "field": "payload",
+  "fieldType": "msg",
+  "format": "html",
+  "syntax": "mustache",
+  "template": "<style>\n    input[type=text] {\n      width: 50em;  height: 3em;\n    }\n    input[type=submit]{\n    background-color: rgb(85,150,230);\n    border: none;\n    color: white;\n    padding: 16px 32px;\n    text-decoration: none;\n    margin: 4px 2px;\n    cursor: pointer;\n    font-size: 15px;\n    border-radius: 10px;\n}\n</style>\n<script type=\"text/javascript\">\nfunction clicked(address) {\n    var form = document.getElementById(\"imageform\");\n\tdocument.getElementById('imageurl').value = address.src;\n\tform.submit();\n}\n</script>\n<div align=\"center\">\n<h1>Welcome to the Watson Visual Recognition Demo on Node-RED</h1>\n    <h2>Click an Image </h2>\n    <form  action=\"{{req._parsedUrl.pathname}}\" id=\"imageform\">\n        <img src=\"http://visual-recognition-demo.ng.bluemix.net/images/samples/1.jpg\" height='100' onclick=\"clicked(this)\"/>\n        <img src=\"http://visual-recognition-demo.ng.bluemix.net/images/samples/2.jpg\" height='100' onclick=\"clicked(this)\"/>\n        <img src=\"http://visual-recognition-demo.ng.bluemix.net/images/samples/3.jpg\" height='100' onclick=\"clicked(this)\"/>\n        <img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Queen_Elizabeth_II_March_2015.jpg/455px-Queen_Elizabeth_II_March_2015.jpg\" height='100' onclick=\"clicked(this)\"/>\n        <h2>or paste an URL from the internet</h2>\n        <input type=\"text\" name=\"imageurl\" id=\"imageurl\"/><br>\n        <input type=\"submit\" value=\"Analyze\"/>\n    </form>\n</div>",
+  "x": 448,
+  "y": 208,
+  "wires": [
+    ["bec0436.fa735c"]
+  ]
+}, {
+  "id": "e673330f.11e81",
+  "type": "visual-recognition-v3",
+  "z": "3cb293ec.b3f05c",
+  "name": "",
+  "apikey": "__PWRD__",
+  "image-feature": "classifyImage",
+  "lang": "en",
+  "x": 555,
+  "y": 365,
+  "wires": [
+    ["d0600c64.e0d8f", "d8e8fb20.248328"]
+  ]
+}, {
+  "id": "d0600c64.e0d8f",
+  "type": "template",
+  "z": "3cb293ec.b3f05c",
+  "name": "Report",
+  "field": "payload",
+  "fieldType": "msg",
+  "format": "html",
+  "syntax": "mustache",
+  "template": "<style>\nh4 {\n    text-align: center;\n    margin: 10px;\n}\ntable {\n    width: 480px;\n    margin-top: 10px;\n}\nth, td {\n    padding: 8px;\n    text-align: left;\n    border-bottom: 1px solid #ddd;\n    background-color: #FFFFFF;\n    width: 50%;\n}\n.classifier {\n    background-color: rgb(85,150,230);\n    text-align: center;\n}\n.title {\n    background-color:LightGrey;\n}\ninput[type=submit]{\n    background-color: rgb(85,150,230);\n    border: none;\n    color: white;\n    padding: 16px 32px;\n    text-decoration: none;\n    margin: 4px 2px;\n    cursor: pointer;\n    font-size: 15px;\n    border-radius: 10px;\n}\n</style>\n    <div align=\"center\">\n    <form  action=\"{{req._parsedUrl.pathname}}\">\n        <input type=\"submit\" value=\"Try again\"/>\n    </form>\n    <h1>Node-RED Watson Visual Recognition output</h1>\n    <p>Analyzed image: {{req.query.imageurl}}<br/><img src=\"{{req.query.imageurl}}\" height='200'/></p>\n    <p><b>Here are my results:</b></p>\n    {{#result.images}}\n        {{#classifiers}}\n            <table border=\"0\">\n            <tr><td class=classifier colspan=\"2\">{{classifier_id}}</td></tr>\n                <tr><td class=\"title\">Class</td><td class=\"title\">Score</td></tr>\n                {{#classes}}\n                <tr><td><b>{{class}}</b></td><td><i>{{score}}</i></td></tr>\n                {{/classes}}\n            </table>\n        {{/classifiers}}\n    {{/result.images}}\n    </div>\n",
+  "x": 722,
+  "y": 295,
+  "wires": [
+    ["bec0436.fa735c"]
+  ]
+}, {
+  "id": "bec0436.fa735c",
+  "type": "http response",
+  "z": "3cb293ec.b3f05c",
+  "name": "HTTP Response",
+  "x": 800,
+  "y": 209,
+  "wires": []
+}, {
+  "id": "9392f327.63e1a",
+  "type": "debug",
+  "z": "3cb293ec.b3f05c",
+  "name": "P0",
+  "active": true,
+  "console": "false",
+  "complete": "true",
+  "x": 478,
+  "y": 417,
+  "wires": []
+}, {
+  "id": "d8e8fb20.248328",
+  "type": "debug",
+  "z": "3cb293ec.b3f05c",
+  "name": "VisRecResult",
+  "active": false,
+  "console": "false",
+  "complete": "true",
+  "x": 711,
+  "y": 417,
+  "wires": []
+}, {
+  "id": "331a89d4.c4dff6",
+  "type": "function",
+  "z": "3cb293ec.b3f05c",
+  "name": "Extract img URL",
+  "func": "msg.payload = msg.payload[\"imageurl\"];\nreturn msg;",
+  "outputs": 1,
+  "noerr": 0,
+  "x": 302,
+  "y": 365,
+  "wires": [
+    ["e673330f.11e81", "9392f327.63e1a"]
+  ]
+}, {
+  "id": "a11978b4.dd39b8",
+  "type": "debug",
+  "z": "3cb293ec.b3f05c",
+  "name": "P1",
+  "active": false,
+  "console": "false",
+  "complete": "true",
+  "x": 488,
+  "y": 287,
+  "wires": []
+}]
