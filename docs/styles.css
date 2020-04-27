@@ -6,5 +6,5 @@
 }
 .inner:hover img {
   z-index: 55555555;
-  transform: scale(3.0);
+  transform: scale(2.5);
 }
