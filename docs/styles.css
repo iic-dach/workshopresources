@@ -1,0 +1,10 @@
+/* .inner {
+  overflow: hidden;
+} */
+.inner img {
+  transition: all 1.5s ease;
+}
+.inner:hover img {
+  z-index: 55555555;
+  transform: scale(3.0);
+}
