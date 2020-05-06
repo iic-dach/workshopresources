@@ -1,1 +1,1 @@
-[workshopresources] (https://iic-dach.github.io/workshopresources)
+https://iic-dach.github.io/workshopresources
